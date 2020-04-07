@@ -6,7 +6,8 @@ Class {
 
 { #category : #initialization }
 GOLCell >> initialize [
+		super initialize.
 	self background: Color black.
-	self size: GOLBoard resolution asPoint.
-	self geometry: BlSquare new.
+	self size: 4 asPoint.
+	self geometry: BlSquare new
 ]
