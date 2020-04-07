@@ -43,13 +43,14 @@ GOLSpace >> initialize [
 
 { #category : #initialization }
 GOLSpace >> initializeElementsAndAppearance [
-	| headerElem boardElem |
+	| headerElem boardElem emptyText |
 	age := 0.
 	ageTextElem := GOLLabel text: age.
 	backButtonElem := GOLBackButton text: 'Back'.
 	startButtonElem := GOLStartButton text: 'Start'.
 	stopButtonElem := GOLStopButton text: 'Stop'.
 	nextButtonElem := GOLNextButton text: 'Next'.
+	emptyText := GOLLabel new.
 	headerElem := GOLHeader new.
 	headerElem
 		addChildren:
@@ -57,7 +58,7 @@ GOLSpace >> initializeElementsAndAppearance [
 			backButtonElem.
 			startButtonElem.
 			stopButtonElem.
-			nextButtonElem}.
+			nextButtonElem. emptyText}.
 	boardElem := GOLBoard new.
 	self
 		extent:
