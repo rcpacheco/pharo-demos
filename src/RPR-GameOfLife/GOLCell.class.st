@@ -5,14 +5,14 @@ Class {
 }
 
 { #category : #initialization }
-GOLCell >> initialize [
-		super initialize.
-	self background: Color black.
-	self size: 4 asPoint.
-	self geometry: BlSquare new
+GOLCell >> cellSize [
+	^ 18
 ]
 
 { #category : #initialization }
-GOLCell >> resolution [
-	^ 4
+GOLCell >> initialize [
+	super initialize.
+	self background: Color green.
+	self size: self cellSize asPoint.
+	self geometry: BlSquare new
 ]

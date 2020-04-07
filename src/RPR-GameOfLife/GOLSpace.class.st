@@ -58,15 +58,16 @@ GOLSpace >> initializeElementsAndAppearance [
 			backButtonElem.
 			startButtonElem.
 			stopButtonElem.
-			nextButtonElem. emptyText}.
+			nextButtonElem.
+			emptyText}.
 	boardElem := GOLBoard new.
 	self
 		extent:
 			boardElem defaultWidth
 				@ (boardElem defaultHeight + headerElem defaultHeight);
 		title: 'Conway''s Game of Life'.
-	rows := boardElem height / self resolution.
-	cols := boardElem width / self resolution.
+	rows := boardElem height / boardElem cellsGap.
+	cols := boardElem width / boardElem cellsGap.
 	grid := Array2D rows: rows columns: cols.
 	self root
 		layout:
