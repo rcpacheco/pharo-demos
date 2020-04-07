@@ -11,3 +11,8 @@ GOLCell >> initialize [
 	self size: 4 asPoint.
 	self geometry: BlSquare new
 ]
+
+{ #category : #initialization }
+GOLCell >> resolution [
+	^ 4
+]
