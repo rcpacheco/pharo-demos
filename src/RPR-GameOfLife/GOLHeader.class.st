@@ -13,12 +13,12 @@ GOLHeader >> defaultHeight [
 GOLHeader >> initialize [
 	super initialize.
 	self
-		background: Color veryDarkGray;
+		background: Color orange;
 		layout:
 			(BlGridLayout new
-				columnCount: 4;
+				columnCount: 5;
 				rowCount: 1;
-				cellSpacing: 10;
+				cellSpacing: 6;
 				alignMargins);
 		constraintsDo: [ :c | 
 			c horizontal matchParent.
