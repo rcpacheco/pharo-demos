@@ -6,8 +6,10 @@ Class {
 
 { #category : #accessing }
 GOLButton class >> text: aText [
-
-	^ self new label: aText; yourself
+"Create an Instance and initialize its content with the received text"
+	^ self new
+		label: aText;
+		yourself
 ]
 
 { #category : #initialization }
