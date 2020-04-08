@@ -5,6 +5,19 @@ Class {
 }
 
 { #category : #accessing }
+GOLHeader class >> age: anInteger [
+	^ self new
+		addChildren: { 
+			GOLLabel text: anInteger.
+			GOLBackButton text: 'Back'.
+			GOLStartButton text: 'Start'.
+			GOLStopButton text: 'Stop'.
+			GOLNextButton text: 'Next'.
+			GOLLabel new};
+		yourself
+]
+
+{ #category : #accessing }
 GOLHeader >> defaultHeight [
 	^ 50
 ]
@@ -13,6 +26,7 @@ GOLHeader >> defaultHeight [
 GOLHeader >> initialize [
 	super initialize.
 	self
+		relocate: 0@0;
 		hMatchParent;
 		alignCenter;
 		cellSpacing: 20;

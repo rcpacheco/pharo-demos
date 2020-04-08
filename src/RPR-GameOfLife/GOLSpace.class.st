@@ -2,35 +2,23 @@ Class {
 	#name : #GOLSpace,
 	#superclass : #BlSpace,
 	#instVars : [
-		'backButtonElem',
-		'startButtonElem',
-		'nextButtonElem',
 		'cols',
-		'age',
-		'grid',
 		'rows',
-		'ageTextElem',
-		'stopButtonElem'
+		'grid',
+		'age',
+		'cellsGap'
 	],
 	#category : #'RPR-GameOfLife'
 }
 
 { #category : #accessing }
-GOLSpace >> cols [
-
-  ^cols
+GOLSpace >> boardHeight [
+	^ 600
 ]
 
-{ #category : #creating }
-GOLSpace >> createAgeText: anInteger [
-	| locationLabel textElem |
-	locationLabel := anInteger asRopedText
-		foreground: Color white;
-		fontSize: 16;
-		fontName: 'Helvetica';
-		thin.
-	textElem := BlTextElement text: locationLabel.
-	^ textElem
+{ #category : #accessing }
+GOLSpace >> boardWidth [
+	^ 800
 ]
 
 { #category : #initialization }
@@ -43,55 +31,40 @@ GOLSpace >> initialize [
 
 { #category : #initialization }
 GOLSpace >> initializeElementsAndAppearance [
-	| headerElem boardElem emptyText |
+	| headerElem line cell |
 	age := 0.
-	ageTextElem := GOLLabel text: age.
-	backButtonElem := GOLBackButton text: 'Back'.
-	startButtonElem := GOLStartButton text: 'Start'.
-	stopButtonElem := GOLStopButton text: 'Stop'.
-	nextButtonElem := GOLNextButton text: 'Next'.
-	emptyText := GOLLabel new.
-	headerElem := GOLHeader new.
-	headerElem
-		addChildren:
-			{ageTextElem.
-			backButtonElem.
-			startButtonElem.
-			stopButtonElem.
-			nextButtonElem.
-			emptyText}.
-	boardElem := GOLBoard new.
+	cellsGap := 20.
+	headerElem := GOLHeader age: age.
 	self
-		extent:
-			boardElem defaultWidth
-				@ (boardElem defaultHeight + headerElem defaultHeight);
+		extent: self boardWidth @ (self boardHeight + headerElem defaultHeight);
 		title: 'Conway''s Game of Life'.
-	rows := boardElem height / boardElem cellsGap.
-	cols := boardElem width / boardElem cellsGap.
+	rows := self boardHeight / cellsGap.
+	cols := self boardWidth / cellsGap.
 	grid := Array2D rows: rows columns: cols.
 	self root
-		layout:
-			(BlGridLayout new
-				columnCount: 1;
-				rowCount: 2);
-		background: Color white;
-		addChildren:
-			{headerElem.
-			boardElem}
+		background: Color lightYellow;
+		addChild: headerElem.
+	"Add column lines"
+	1 to: cols do: [ :c | 
+		line := GOLBoardLine
+			from: (c * cellsGap) @ headerElem defaultHeight
+			to: (c * cellsGap) @ (self boardHeight + headerElem defaultHeight).
+		self addChild: line ].
+	"Add rows lines"
+	1 to: rows do: [ :r | 
+		line := GOLBoardLine
+			from: 0 @ (r * cellsGap + headerElem defaultHeight)
+			to: self boardWidth @ (r * cellsGap + headerElem defaultHeight).
+		self addChild: line ].
+	"Add cells"
+	0 to: cols - 1 do: [ :c | 
+		0 to: rows - 1 do: [ :r | 
+			cell := GOLCell new
+				relocate: (c * cellsGap + 1) @ (r * cellsGap + 1 + headerElem defaultHeight).
+			self addChild: cell ] ]
 ]
 
 { #category : #initialization }
 GOLSpace >> initializeInteractivity [
 	
-]
-
-{ #category : #initialization }
-GOLSpace >> resolution [
-	^ 4
-]
-
-{ #category : #accessing }
-GOLSpace >> rows [
-
-  ^rows
 ]
