@@ -1,3 +1,7 @@
+"
+I represent the Bloc space where the Game of Life is running
+
+"
 Class {
 	#name : #GOLSpace,
 	#superclass : #BlSpace,

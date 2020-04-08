@@ -9,9 +9,9 @@ GOLHeader class >> age: anInteger [
 	^ self new
 		addChildren:
 			{(GOLLabel text: anInteger).
-			(GOLBackButton new).
-			(GOLToggleButton new).
-			(GOLNextButton new).
+			GOLBackButton new.
+			GOLToggleButton new.
+			GOLNextButton new.
 			GOLLabel new};
 		yourself
 ]
