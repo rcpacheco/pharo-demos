@@ -2,22 +2,12 @@ Class {
 	#name : #GOLSparseMatrix,
 	#superclass : #Object,
 	#instVars : [
-		'dict'
+		'dict',
+		'width',
+		'height'
 	],
 	#category : #'RPR-GameOfLife'
 }
-
-{ #category : #initialization }
-GOLSparseMatrix >> cellStateAt: aPoint value: aValue [
-	"Sets a cell state. If aValue puts the value in the dictionary using aPoint as key.
-	 If aValue is false and the cell was alive, 
-	 it removes it's key location from the dictionary; if not, it does nothing."
-	
-	aValue 
-		ifTrue: [ dict at: aPoint put: aValue ] 
-		ifFalse: [ dict removeKey: aPoint ifAbsent: [ true] ].
-
-]
 
 { #category : #accessing }
 GOLSparseMatrix >> dict [
@@ -27,6 +17,16 @@ GOLSparseMatrix >> dict [
 { #category : #accessing }
 GOLSparseMatrix >> dict: anObject [
 	dict := anObject
+]
+
+{ #category : #accessing }
+GOLSparseMatrix >> height [
+	^ height
+]
+
+{ #category : #accessing }
+GOLSparseMatrix >> height: anObject [
+	height := anObject
 ]
 
 { #category : #initialization }
@@ -42,4 +42,26 @@ GOLSparseMatrix >> isAlliveCellAt: aPoint [
 	
 	^ dict at: aPoint  ifAbsent: [ false ].
 
+]
+
+{ #category : #initialization }
+GOLSparseMatrix >> setCellStateAt: aPoint value: aValue [
+	"Sets a cell state. If aValue puts the value in the dictionary using aPoint as key.
+	 If aValue is false and the cell was alive, 
+	 it removes it's key location from the dictionary; if not, it does nothing."
+	
+	aValue 
+		ifTrue: [ dict at: aPoint put: aValue ] 
+		ifFalse: [ dict removeKey: aPoint ifAbsent: [ true] ].
+
+]
+
+{ #category : #accessing }
+GOLSparseMatrix >> width [
+	^ width
+]
+
+{ #category : #accessing }
+GOLSparseMatrix >> width: anObject [
+	width := anObject
 ]
