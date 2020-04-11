@@ -5,18 +5,6 @@ Class {
 }
 
 { #category : #accessing }
-GOLHeader class >> age: anInteger [
-	^ self new
-		addChildren:
-			{(GOLLabel text: anInteger).
-			GOLBackButton new.
-			GOLToggleButton new.
-			GOLNextButton new.
-			GOLLabel new};
-		yourself
-]
-
-{ #category : #accessing }
 GOLHeader >> defaultHeight [
 "Default height of the game header"
 	^ 50
@@ -32,5 +20,11 @@ GOLHeader >> initialize [
 		hMatchParent;
 		alignCenter;
 		cellSpacing: 20;
-		background: Color orange
+		background: Color orange;
+		addChildren:
+			{(GOLLabel text: 0).
+			GOLBackButton new.
+			GOLToggleButton new.
+			GOLNextButton new.
+			GOLLabel new}
 ]

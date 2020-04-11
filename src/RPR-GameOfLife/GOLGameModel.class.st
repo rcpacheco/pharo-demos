@@ -2,6 +2,7 @@ Class {
 	#name : #GOLGameModel,
 	#superclass : #Object,
 	#instVars : [
+		'age',
 		'gridSize',
 		'statesHistory',
 		'currentState'
@@ -16,6 +17,16 @@ GOLGameModel class >> rows: rows columns: cols [
 	^ self new gridSize: cols @ rows
 ]
 
+{ #category : #accessing }
+GOLGameModel >> age [
+	^ age
+]
+
+{ #category : #accessing }
+GOLGameModel >> age: anObject [
+	age := anObject
+]
+
 { #category : #'accessing structure variables' }
 GOLGameModel >> cols [
 	"Returns the number of columns of the grid model"
@@ -24,12 +35,14 @@ GOLGameModel >> cols [
 
 { #category : #accessing }
 GOLGameModel >> currentState [
-"Gives access to the current state of the model, using lazy initialization"
+	"Gives access to the current state of the model"
 
-  currentState ifNil: [ 
-		currentState := OrderedCollection new.
-  ].
-^ currentState
+	^ currentState
+]
+
+{ #category : #accessing }
+GOLGameModel >> currentState: anObject [
+	currentState := anObject
 ]
 
 { #category : #initialization }
@@ -57,9 +70,10 @@ GOLGameModel >> initialize [
 	"Set te initial conditions of the model, excepts for the instance variable currentState,
 	 that uses lazy initialization, in case a diferent grid size has been set using a class constructor"
 
+	age := 0.
 	gridSize := self defaultGridSize.
-	statesHistory := OrderedCollection new.
-	
+	currentState := OrderedCollection new.
+	statesHistory := OrderedCollection new
 ]
 
 { #category : #'accessing structure variables' }

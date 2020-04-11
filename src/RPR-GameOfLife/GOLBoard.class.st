@@ -9,23 +9,25 @@ GOLBoard class >> bigBoard [
 	"Creates a board with a specific size"
 
 	<gtExample>
-	^ GOLBoard createWithSize: 600 @ 480
+	^ GOLBoard createWithSize: 800 @ 640
 ]
 
 { #category : #'instace creation' }
 GOLBoard class >> createWithSize: aPoint [
 	"Creates a board with a specific size"
 
-	^ GOLBoard new size: aPoint; addLines; yourself.
-
+	^ GOLBoard new
+		size: aPoint;
+		addLinesAndCells;
+		yourself
 ]
 
 { #category : #'instace creation' }
-GOLBoard class >> hugeBoard [
-	"Creates a board with a specific size"
+GOLBoard class >> defaultBoard [
+	"Creates a board with the default dimensions"
 
 	<gtExample>
-	^ GOLBoard createWithSize: 800 @ 640
+	^ GOLBoard bigBoard
 ]
 
 { #category : #'instace creation' }
@@ -33,7 +35,7 @@ GOLBoard class >> mediumBoard [
 	"Creates a board with a specific size"
 
 	<gtExample>
-	^ GOLBoard createWithSize: 400 @ 320
+	^ GOLBoard createWithSize: 600 @ 480
 ]
 
 { #category : #'instace creation' }
@@ -41,11 +43,11 @@ GOLBoard class >> smallBoard [
 	"Creates a board with a specific size"
 
 	<gtExample>
-	^ GOLBoard createWithSize: 200 @ 160
+	^ GOLBoard createWithSize: 400 @ 320
 ]
 
 { #category : #adding }
-GOLBoard >> addLines [
+GOLBoard >> addLinesAndCells [
 	| cols rows |
 	cols := self getSize x / self cellsGap.
 	rows := self getSize y / self cellsGap.
@@ -60,7 +62,8 @@ GOLBoard >> addLines [
 			addChild:
 				(GOLBoardLine
 					from: 0 @ (r * self cellsGap)
-					to: self getSize x @ (r * self cellsGap)) ]
+					to: self getSize x @ (r * self cellsGap)) ].
+	1 to: cols do: [ :c | 1 to: rows do: [ :r | self newCellAt: c at: r ] ]
 ]
 
 { #category : #initialization }
@@ -68,6 +71,12 @@ GOLBoard >> cellsGap [
 	"Separation between column and row lines in the game board"
 
 	^ 20
+]
+
+{ #category : #accessing }
+GOLBoard >> getHeight [
+	
+	^ self getSize y
 ]
 
 { #category : #accessing }
@@ -80,12 +89,30 @@ GOLBoard >> getSize [
 		^ self extent
 ]
 
+{ #category : #accessing }
+GOLBoard >> getWidth [
+	^ self getSize x
+]
+
 { #category : #initialization }
 GOLBoard >> initialize [
 	super initialize.
 	self
 		size: 200 asPoint;
 		background: Color lightYellow
+]
+
+{ #category : #'instance creation' }
+GOLBoard >> newCellAt: c at: r [
+	"Create a cell for position (c,r) and add it to my on-screen
+	representation at the appropriate screen position. Answer the
+	new cell"
+
+	| cell |
+	cell := GOLCell new
+		relocate: ((c - 1) * self cellsGap + 1) @ ((r - 1) * self cellsGap + 1 ).
+	self addChild: cell.
+	^ cell
 ]
 
 { #category : #initialization }
