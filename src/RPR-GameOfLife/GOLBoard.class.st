@@ -16,9 +16,12 @@ GOLBoard class >> bigBoard [
 GOLBoard class >> createWithSize: aPoint [
 	"Creates a board with a specific size"
 
-	^ GOLBoard new
+	| board |
+	board := GOLBoard new
 		size: aPoint;
-		yourself
+		yourself.
+	board addLines.
+	^ board
 ]
 
 { #category : #'instace creation' }
@@ -45,6 +48,25 @@ GOLBoard class >> smallBoard [
 	^ GOLBoard createWithSize: 200 @ 160
 ]
 
+{ #category : #adding }
+GOLBoard >> addLines [
+|cols rows|
+	cols := self width / self cellsGap .
+	rows := self height / self cellsGap .
+	1 to: cols do: [ :c | 
+		self
+			addChild:
+				(GOLBoardLine
+					from: (c * self cellsGap) @ 0
+					to: (c * self cellsGap) @ 200) ].
+	1 to: rows do: [ :r | 
+		self
+			addChild:
+				(GOLBoardLine
+					from: 0 @ (r * self cellsGap)
+					to: 200 @ (r * self cellsGap)) ]
+]
+
 { #category : #initialization }
 GOLBoard >> cellsGap [
 	"Separation between column and row lines in the game board"
@@ -58,19 +80,7 @@ GOLBoard >> initialize [
 	self
 		size: 200 asPoint;
 		background: Color lightYellow.
-	1 to: 20 do: [ :c | 
-		self
-			addChild:
-				(GOLBoardLine
-					from: (c * self cellsGap) @ 0
-					to: (c * self cellsGap) @ 200)
-	].
-	1 to: 20 do: [ :r | 
-		self
-			addChild:
-				(GOLBoardLine
-					from: 0 @ (r * self cellsGap)
-					to: 200 @ (r * self cellsGap)) ]
+
 ]
 
 { #category : #initialization }
