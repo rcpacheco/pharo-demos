@@ -22,7 +22,7 @@ GOLSpace >> initialize [
 	boardElem := GOLBoard defaultBoard.
 	headerGap := headerElem defaultHeight.
 	self
-		extent: boardElem getWidth @ (boardElem getHeight + headerGap);
+		extent: boardElem width @ (boardElem height + headerGap);
 		title: 'Conway''s Game of Life'.
 	self root
 		layout:

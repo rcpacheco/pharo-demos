@@ -18,6 +18,7 @@ GOLBoard class >> createWithSize: aPoint [
 
 	^ GOLBoard new
 		size: aPoint;
+		forceLayout;
 		addLinesAndCells;
 		yourself
 ]
@@ -49,20 +50,20 @@ GOLBoard class >> smallBoard [
 { #category : #adding }
 GOLBoard >> addLinesAndCells [
 	| cols rows |
-	cols := self getSize x / self cellsGap.
-	rows := self getSize y / self cellsGap.
+	cols := self width / self cellsGap.
+	rows := self height / self cellsGap.
 	1 to: cols do: [ :c | 
 		self
 			addChild:
 				(GOLBoardLine
 					from: (c * self cellsGap) @ 0
-					to: (c * self cellsGap) @ self getSize y) ].
+					to: (c * self cellsGap) @ self height) ].
 	1 to: rows do: [ :r | 
 		self
 			addChild:
 				(GOLBoardLine
 					from: 0 @ (r * self cellsGap)
-					to: self getSize x @ (r * self cellsGap)) ].
+					to: self width @ (r * self cellsGap)) ].
 	1 to: cols do: [ :c | 1 to: rows do: [ :r | self newCellAt: c at: r ] ]
 ]
 
@@ -73,32 +74,10 @@ GOLBoard >> cellsGap [
 	^ 20
 ]
 
-{ #category : #accessing }
-GOLBoard >> getHeight [
-	
-	^ self getSize y
-]
-
-{ #category : #accessing }
-GOLBoard >> getSize [
-	| aLayoutConstraints |
-	aLayoutConstraints := self constraints.
-	(aLayoutConstraints horizontal resizer isExact
-		and: [ aLayoutConstraints vertical resizer isExact ])
-		ifTrue: [ ^ (aLayoutConstraints horizontal resizer size) @ (aLayoutConstraints vertical resizer size)].
-		^ self extent
-]
-
-{ #category : #accessing }
-GOLBoard >> getWidth [
-	^ self getSize x
-]
-
 { #category : #initialization }
 GOLBoard >> initialize [
 	super initialize.
 	self
-		size: 200 asPoint;
 		background: Color lightYellow
 ]
 
