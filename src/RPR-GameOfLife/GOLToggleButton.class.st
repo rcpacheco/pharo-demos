@@ -13,10 +13,14 @@ GOLToggleButton >> initialize [
 
 	super initialize.
 	isRunning := false.
-	self label: self stoppedLabel.
 	self
+		label: self stoppedLabel;
 		addEventHandlerOn: BlMouseDownEvent
-		do: [ :evt | self toggleGameStatus ]
+			do: [ :evt | 
+			self toggleGameStatus.
+			Transcript
+				show: 'Toogle click';
+				cr ]
 ]
 
 { #category : #initialization }
