@@ -9,9 +9,10 @@ Class {
 
 { #category : #'mouse handlers' }
 GOLToogledCellEventListener >> clickEvent: anEvent [
- "Updates the cell state and the current state of the model when a cell is clicked"
+	"Updates the cell state and the current state of the model when a cell is clicked"
+
 	anEvent target toggleState.
-	self gameModel
+	gameModel
 		setCellStateAt: anEvent currentTarget location
 		value: anEvent target isAlive
 ]

@@ -57,10 +57,26 @@ GOLCell >> location: anObject [
 ]
 
 { #category : #updating }
+GOLCell >> setAlive [
+	"Change the status and color of the cell to represent an alive cell"
+
+	isAlive := true.
+	self background: self aliveColor
+]
+
+{ #category : #updating }
+GOLCell >> setDead [
+	"Change the status and color of the cell to represent a dead cell"
+
+	isAlive := false.
+	self background: self deadColor
+]
+
+{ #category : #updating }
 GOLCell >> toggleState [
-"Change the status and color of the cell"
-	isAlive := isAlive not.
+	"Change the status and color of the cell"
+
 	isAlive
-		ifTrue: [ self background: self aliveColor ]
-		ifFalse: [ self background: self deadColor ]
+		ifTrue: [ self setDead ]
+		ifFalse: [ self setAlive ]
 ]

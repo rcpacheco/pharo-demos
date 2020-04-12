@@ -70,7 +70,8 @@ GOLBoard >> addLinesAndCells [
 				(GOLBoardLine
 					from: 0 @ (r * self cellsGap)
 					to: self width @ (r * self cellsGap)) ].
-	1 to: cols do: [ :c | 1 to: rows do: [ :r | self newCellAt: c at: r model: self gameModel] ]
+	1 to: cols do:
+		[ :c | 1 to: rows do: [ :r | self newCellAt: c at: r model: gameModel ] ]
 ]
 
 { #category : #initialization }
@@ -88,6 +89,11 @@ GOLBoard >> gameModel [
 { #category : #accessing }
 GOLBoard >> gameModel: anObject [
 	gameModel := anObject
+]
+
+{ #category : #'as yet unclassified' }
+GOLBoard >> getAllCells [
+^ self children select: [ :ch | ch class = GOLCell]
 ]
 
 { #category : #initialization }
