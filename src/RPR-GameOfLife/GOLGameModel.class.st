@@ -32,17 +32,22 @@ GOLGameModel >> currentState: anObject [
 	currentState := anObject
 ]
 
+{ #category : #lifecycle }
+GOLGameModel >> doNextLife [
+	
+]
+
 { #category : #location }
-GOLGameModel >> getAdjustedLocation: aPoint toSize: aSize [
+GOLGameModel >> getAdjustedLocation: aPoint [
 	| targetX targetY |
 	targetX := aPoint x = 0
-		ifTrue: [ aSize x ]
-		ifFalse: [ aPoint x = aSize x
+		ifTrue: [ self gridSize x ]
+		ifFalse: [ aPoint x = self gridSize x
 				ifTrue: [ 0 ]
 				ifFalse: [ aPoint x ] ].
 	targetY := aPoint y = 0
-		ifTrue: [ aSize y ]
-		ifFalse: [ aPoint y = aSize y
+		ifTrue: [ self gridSize y ]
+		ifFalse: [ aPoint y = self gridSize y
 				ifTrue: [ 0 ]
 				ifFalse: [ aPoint y ] ].
 	^ targetX @ targetY
@@ -50,13 +55,22 @@ GOLGameModel >> getAdjustedLocation: aPoint toSize: aSize [
 
 { #category : #accessing }
 GOLGameModel >> getAliveNeighborsAt: aPoint [
-	aPoint eightNeighbors
-		collect: [ :location | 
-			self
-				getAdjustedLocation: location
-				toSize: self gridSize ]
-		thenSelect:
+	^(self getNeighborsAt: aPoint)
+		select:
 			[ :adjustedLocation | self currentState isAlliveCellAt: adjustedLocation ]
+]
+
+{ #category : #accessing }
+GOLGameModel >> getDeadNeighborsAt: aPoint [
+	^(self getNeighborsAt: aPoint)
+		reject:
+			[ :adjustedLocation | self currentState isAlliveCellAt: adjustedLocation ]
+]
+
+{ #category : #accessing }
+GOLGameModel >> getNeighborsAt: aPoint [
+	^aPoint eightNeighbors
+		collect: [ :location | self getAdjustedLocation: location ]
 ]
 
 { #category : #accessing }
@@ -87,6 +101,15 @@ GOLGameModel >> isHistoryEmpty [
 	"SChecks if the states history is empty."
 
 	statesHistory isEmpty
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> nextLife [
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> onNextLife [
+	
 ]
 
 { #category : #history }

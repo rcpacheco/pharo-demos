@@ -2,7 +2,7 @@ Class {
 	#name : #GOLSparseMatrix,
 	#superclass : #Object,
 	#instVars : [
-		'dict',
+		'content',
 		'width',
 		'height'
 	],
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : #accessing }
-GOLSparseMatrix >> dict [
-	^ dict
+GOLSparseMatrix >> content [
+	^ content
 ]
 
 { #category : #accessing }
-GOLSparseMatrix >> dict: anObject [
-	dict := anObject
+GOLSparseMatrix >> content: anObject [
+	content := anObject
 ]
 
 { #category : #accessing }
@@ -31,29 +31,33 @@ GOLSparseMatrix >> height: anObject [
 
 { #category : #initialization }
 GOLSparseMatrix >> initialize [
-	"Defines a Dictionary to store the sparse matrix values using the alive cell's location points as keys"
+	"Defines a Set to store the  alive cell's location points. Only alive cells are stored."
 
-    dict := Dictionary new
+	content := Set new
 ]
 
 { #category : #initialization }
 GOLSparseMatrix >> isAlliveCellAt: aPoint [
 	"Returns true if key for aPont with value true exists, otherwise returns false."
-	
-	^ dict at: aPoint  ifAbsent: [ false ].
 
+	^ content includes: aPoint
+]
+
+{ #category : #initialization }
+GOLSparseMatrix >> isDeadCellAt: aPoint [
+	"Returns true if a dead cell exist at the location aPoint."
+
+	^ (self isAlliveCellAt: aPoint) not
 ]
 
 { #category : #initialization }
 GOLSparseMatrix >> setCellStateAt: aPoint value: aValue [
-	"Sets a cell state. If aValue puts the value in the dictionary using aPoint as key.
-	 If aValue is false and the cell was alive, 
-	 it removes it's key location from the dictionary; if not, it does nothing."
-	
-	aValue 
-		ifTrue: [ dict at: aPoint put: aValue ] 
-		ifFalse: [ dict removeKey: aPoint ifAbsent: [ true] ].
+	"Sets a cell state. If the value is true, aPoint is added to de content, otherwise is removed."
 
+	aValue
+		ifTrue: [ content add: aPoint ]
+		ifFalse: [ content remove: aPoint ifAbsent: [  ] ].
+		^content 
 ]
 
 { #category : #accessing }
