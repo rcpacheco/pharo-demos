@@ -2,7 +2,8 @@ Class {
 	#name : #GOLCell,
 	#superclass : #BlElement,
 	#instVars : [
-		'isAlive'
+		'isAlive',
+		'location'
 	],
 	#category : #'RPR-GameOfLife'
 }
@@ -35,9 +36,7 @@ GOLCell >> initialize [
 	isAlive := false.
 	self
 		background: self deadColor;
-		size: self cellSize asPoint;
-		addEventHandlerOn: BlMouseDownEvent
-			do: [ :e | e target toggleState ]
+		size: self cellSize asPoint
 ]
 
 { #category : #accessing }
@@ -45,6 +44,16 @@ GOLCell >> isAlive [
 	"Gives the current state of the cell"
 
 	^ isAlive
+]
+
+{ #category : #accessing }
+GOLCell >> location [
+	^ location
+]
+
+{ #category : #accessing }
+GOLCell >> location: anObject [
+	location := anObject
 ]
 
 { #category : #updating }

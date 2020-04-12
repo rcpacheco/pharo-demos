@@ -10,13 +10,6 @@ Class {
 	#category : #'RPR-GameOfLife'
 }
 
-{ #category : #'instance creation' }
-GOLGameModel class >> rows: rows columns: cols [
-	"Generate a model with dimentios defined by the arguments cols and rows"
-
-	^ self new gridSize: cols @ rows
-]
-
 { #category : #accessing }
 GOLGameModel >> age [
 	^ age
@@ -25,12 +18,6 @@ GOLGameModel >> age [
 { #category : #accessing }
 GOLGameModel >> age: anObject [
 	age := anObject
-]
-
-{ #category : #'accessing structure variables' }
-GOLGameModel >> cols [
-	"Returns the number of columns of the grid model"
-^ gridSize x
 ]
 
 { #category : #accessing }
@@ -43,13 +30,6 @@ GOLGameModel >> currentState [
 { #category : #accessing }
 GOLGameModel >> currentState: anObject [
 	currentState := anObject
-]
-
-{ #category : #initialization }
-GOLGameModel >> defaultGridSize [
-	"Define default size of the game's grid, if no other dimentions are given on model creation"
-
-	^ 800 @ 600
 ]
 
 { #category : #accessing }
@@ -67,23 +47,39 @@ GOLGameModel >> gridSize: anObject [
 
 { #category : #initialization }
 GOLGameModel >> initialize [
-	"Set te initial conditions of the model, excepts for the instance variable currentState,
-	 that uses lazy initialization, in case a diferent grid size has been set using a class constructor"
+	"Set te initial conditions of the model, excepts for the gridSize, 
+	 that hast to be set bup depending on the board size"
 
 	age := 0.
-	gridSize := self defaultGridSize.
-	currentState := OrderedCollection new.
+	currentState := GOLSparseMatrix new.
 	statesHistory := OrderedCollection new
 ]
 
-{ #category : #'accessing structure variables' }
-GOLGameModel >> rows [ 
+{ #category : #history }
+GOLGameModel >> isHistoryEmpty [
+	"SChecks if the states history is empty."
 
-^ gridSize x
+	statesHistory isEmpty
+]
+
+{ #category : #history }
+GOLGameModel >> popLastStateFromHistory [
+	"Recovers the last state stored in history."
+
+	statesHistory removeLast
+]
+
+{ #category : #history }
+GOLGameModel >> pushCurrentStateToHistory [
+	"Stores the current state as the last element in the states history."
+
+	statesHistory addLast: self currentState
 ]
 
 { #category : #initialization }
-GOLGameModel >> setInitialState [
+GOLGameModel >> setCellStateAt: aPoint value: aValue [
+	"Sets a cell state into the currentState sparse matrix"
 
+	currentState setCellStateAt: aPoint value: aValue
 
 ]

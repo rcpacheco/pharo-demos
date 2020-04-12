@@ -1,6 +1,9 @@
 Class {
 	#name : #GOLBoard,
 	#superclass : #BlElement,
+	#instVars : [
+		'gameModel'
+	],
 	#category : #'RPR-GameOfLife'
 }
 
@@ -16,8 +19,11 @@ GOLBoard class >> bigBoard [
 GOLBoard class >> createWithSize: aPoint [
 	"Creates a board with a specific size"
 
+| aModel |
+aModel := GOLGameModel new gridSize: aPoint; yourself.
 	^ GOLBoard new
 		size: aPoint;
+		gameModel: aModel;
 		forceLayout;
 		addLinesAndCells;
 		yourself
@@ -64,7 +70,7 @@ GOLBoard >> addLinesAndCells [
 				(GOLBoardLine
 					from: 0 @ (r * self cellsGap)
 					to: self width @ (r * self cellsGap)) ].
-	1 to: cols do: [ :c | 1 to: rows do: [ :r | self newCellAt: c at: r ] ]
+	1 to: cols do: [ :c | 1 to: rows do: [ :r | self newCellAt: c at: r model: self gameModel] ]
 ]
 
 { #category : #initialization }
@@ -72,6 +78,16 @@ GOLBoard >> cellsGap [
 	"Separation between column and row lines in the game board"
 
 	^ 20
+]
+
+{ #category : #accessing }
+GOLBoard >> gameModel [
+	^ gameModel
+]
+
+{ #category : #accessing }
+GOLBoard >> gameModel: anObject [
+	gameModel := anObject
 ]
 
 { #category : #initialization }
@@ -82,14 +98,15 @@ GOLBoard >> initialize [
 ]
 
 { #category : #'instance creation' }
-GOLBoard >> newCellAt: c at: r [
-	"Create a cell for position (c,r) and add it to my on-screen
-	representation at the appropriate screen position. Answer the
-	new cell"
+GOLBoard >> newCellAt: c at: r model: aGameModel [
+	"Create a cell for position (c,r), defines its location in the board and
+	 creates an event handler to update the game model when the cell state changes."
 
 	| cell |
 	cell := GOLCell new
-		relocate: ((c - 1) * self cellsGap + 1) @ ((r - 1) * self cellsGap + 1 ).
+		location: c @ r;
+		addEventHandler: (self newToogledCardEventListener gameModel: aGameModel);
+		relocate: ((c - 1) * self cellsGap + 1) @ ((r - 1) * self cellsGap + 1).
 	self addChild: cell.
 	^ cell
 ]
@@ -118,4 +135,9 @@ GOLBoard >> newRowLineAt: r [
 		to: self width @ (r * self cellsGap).
 	self addChild: line.
 	^ line
+]
+
+{ #category : #'instance creation' }
+GOLBoard >> newToogledCardEventListener [
+	^ GOLToogledCellEventListener new
 ]

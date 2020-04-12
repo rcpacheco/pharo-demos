@@ -12,10 +12,9 @@ GOLLabel class >> text: aText [
 	aLabel := self new
 		hFitContent;
 		vFitContent;
-		look: BrGlamorousLabelLook new;
+		look: (BrGlamorousLabelLook new
+					fontSize: 24;
+					foreground: Color darkGray);
 		text: aText.
-	aLabel look
-		fontSize: 24;
-		foreground: Color darkGray.
 	^ aLabel
 ]
