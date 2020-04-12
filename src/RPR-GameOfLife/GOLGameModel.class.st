@@ -32,6 +32,33 @@ GOLGameModel >> currentState: anObject [
 	currentState := anObject
 ]
 
+{ #category : #location }
+GOLGameModel >> getAdjustedLocation: aPoint toSize: aSize [
+	| targetX targetY |
+	targetX := aPoint x = 0
+		ifTrue: [ aSize x ]
+		ifFalse: [ aPoint x = aSize x
+				ifTrue: [ 0 ]
+				ifFalse: [ aPoint x ] ].
+	targetY := aPoint y = 0
+		ifTrue: [ aSize y ]
+		ifFalse: [ aPoint y = aSize y
+				ifTrue: [ 0 ]
+				ifFalse: [ aPoint y ] ].
+	^ targetX @ targetY
+]
+
+{ #category : #accessing }
+GOLGameModel >> getAliveNeighborsAt: aPoint [
+	aPoint eightNeighbors
+		collect: [ :location | 
+			self
+				getAdjustedLocation: location
+				toSize: self gridSize ]
+		thenSelect:
+			[ :adjustedLocation | self currentState isAlliveCellAt: adjustedLocation ]
+]
+
 { #category : #accessing }
 GOLGameModel >> gridSize [
 	"Gives acces to the size of the game's grid"
