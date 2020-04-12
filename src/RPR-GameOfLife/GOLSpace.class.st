@@ -8,7 +8,7 @@ Class {
 	#instVars : [
 		'headerGap'
 	],
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #initialization }

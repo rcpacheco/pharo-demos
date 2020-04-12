@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLBoardLine,
 	#superclass : #BlLineElement,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #'instance creation' }

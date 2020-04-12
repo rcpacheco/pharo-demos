@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'gameModel'
 	],
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Events'
 }
 
 { #category : #'mouse handlers' }

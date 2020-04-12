@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLButton,
 	#superclass : #BrButton,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #accessing }

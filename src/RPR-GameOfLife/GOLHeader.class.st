@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLHeader,
 	#superclass : #BrHorizontalPane,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #accessing }

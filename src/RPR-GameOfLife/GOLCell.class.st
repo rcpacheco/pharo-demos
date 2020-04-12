@@ -5,7 +5,7 @@ Class {
 		'isAlive',
 		'location'
 	],
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #initialization }

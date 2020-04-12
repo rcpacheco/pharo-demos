@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLExamples,
 	#superclass : #Object,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Examples'
 }
 
 { #category : #'instance creation' }

@@ -6,7 +6,7 @@ Class {
 		'width',
 		'height'
 	],
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Model'
 }
 
 { #category : #accessing }

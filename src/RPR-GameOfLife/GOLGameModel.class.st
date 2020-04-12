@@ -10,7 +10,7 @@ Class {
 		'deadNeighboarsBag',
 		'cellsToToggleSet'
 	],
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Model'
 }
 
 { #category : #accessing }
@@ -53,6 +53,16 @@ GOLGameModel >> deadNeighboarsBag [
 { #category : #accessing }
 GOLGameModel >> deadNeighboarsBag: anObject [
 	deadNeighboarsBag := anObject
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> doLastLife [
+	self pushCurrentStateToHistory.
+	age := age + 1.
+	currentState := nextState.
+	nextState := GOLSparseMatrix new.
+	deadNeighboarsBag removeAll.
+	cellsToToggleSet removeAll
 ]
 
 { #category : #lifecycle }
@@ -109,19 +119,32 @@ GOLGameModel >> initialize [
 	"Set te initial conditions of the model, excepts for the gridSize, 
 	 that hast to be set bup depending on the board size"
 
-	self age: 0.
-	self currentState: GOLSparseMatrix new.
-	self nextState: GOLSparseMatrix new.
-	self statesHistory: OrderedCollection new.
-	self deadNeighboarsBag: Bag new.
-	self cellsToToggleSet: Set new
+	 age := 0.
+	 currentState := GOLSparseMatrix new.
+	 nextState := GOLSparseMatrix new.
+	 statesHistory := OrderedCollection new.
+	 deadNeighboarsBag := Bag new.
+	 cellsToToggleSet := Set new
+]
+
+{ #category : #testing }
+GOLGameModel >> isAlliveCellAt: aPoint [
+	"Returns true if a cell is registered as alive, otherwise returns false."
+
+	^ currentState isAlliveCellAt: aPoint
 ]
 
 { #category : #history }
 GOLGameModel >> isHistoryEmpty [
 	"SChecks if the states history is empty."
 
-	self statesHistory isEmpty
+	statesHistory isEmpty
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> lastLife [
+	self doLastLife.
+	self onLastLife
 ]
 
 { #category : #lifecycle }
@@ -153,15 +176,23 @@ GOLGameModel >> nextState: anObject [
 ]
 
 { #category : #lifecycle }
+GOLGameModel >> onLastLife [
+	
+]
+
+{ #category : #lifecycle }
 GOLGameModel >> onNextLife [
 	
 ]
 
 { #category : #history }
 GOLGameModel >> popLastStateFromHistory [
-	"Recovers the last state stored in history."
+	"Recovers the last state stored in history if there is one, otherwise trows an error."
 
-	self statesHistory removeLast
+	self
+		assert: self isHistoryEmpty not
+		description: [ 'History is empty' ].
+	^ statesHistory removeLast
 ]
 
 { #category : #history }
@@ -175,7 +206,7 @@ GOLGameModel >> pushCurrentStateToHistory [
 GOLGameModel >> setCellStateAt: aPoint value: aValue [
 	"Sets a cell state into the currentState sparse matrix"
 
-	self currentState setCellStateAt: aPoint value: aValue
+	currentState setCellStateAt: aPoint value: aValue
 ]
 
 { #category : #accessing }

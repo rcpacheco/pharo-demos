@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLButtonExteriorLook,
 	#superclass : #BrInteractiveCommonLook,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Look'
 }
 
 { #category : #initialization }

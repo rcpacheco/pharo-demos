@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLLabel,
 	#superclass : #BrLabel,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #'instance creation' }

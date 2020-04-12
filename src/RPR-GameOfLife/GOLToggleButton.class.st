@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'isRunning'
 	],
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #initialization }

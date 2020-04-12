@@ -1,7 +1,7 @@
 Class {
 	#name : #GOLNextButton,
 	#superclass : #GOLButton,
-	#category : #'RPR-GameOfLife'
+	#category : #'RPR-GameOfLife-Elements'
 }
 
 { #category : #initialization }
