@@ -15,5 +15,8 @@ GOLButton class >> text: aText [
 { #category : #initialization }
 GOLButton >> initialize [
 	super initialize.
-	self hMatchParent; look: BrGlamorousButtonWithLabelLook new
+	self
+	   hMatchParent;
+		label: 'Button';
+		look: GOLButtonLook new
 ]

@@ -22,9 +22,10 @@ GOLHeader >> initialize [
 		cellSpacing: 20;
 		background: Color orange;
 		addChildren:
-			{(GOLLabel text: 0).
+			{(GOLLabel text: 'Age:').
+			(GOLLabel text: 0).
 			GOLBackButton new.
-			(GOLToggleButton new ).
+			GOLToggleButton new.
 			GOLNextButton new.
 			GOLLabel new}
 ]

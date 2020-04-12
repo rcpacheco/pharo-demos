@@ -6,10 +6,16 @@ Class {
 
 { #category : #'instance creation' }
 GOLLabel class >> text: aText [
-"Create a new instance of a Label with the required position attributes"
-	^ self new
+	"Create a new instance of a Label with the required position attributes"
+
+	| aLabel |
+	aLabel := self new
 		hFitContent;
 		vFitContent;
 		look: BrGlamorousLabelLook new;
-		text: aText
+		text: aText.
+	aLabel look
+		fontSize: 24;
+		foreground: Color darkGray.
+	^ aLabel
 ]
