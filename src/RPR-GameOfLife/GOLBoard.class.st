@@ -29,7 +29,8 @@ GOLBoard class >> createWithSize: aPoint [
 		forceLayout;
 		addLinesAndCells;
 		addEventHandlerOn: GOLDoNextLifeEvent
-			do: [ :evt | self halt.evt target gameModel nextLife ];
+			do: [ :evt | 
+			evt target gameModel nextLife ];
 		addEventHandlerOn: GOLDoLastLifeEvent
 			do: [ :evt | evt target gameModel lastLife ];
 		addEventHandlerOn: GOLToogledCellEvent

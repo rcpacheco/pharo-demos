@@ -13,8 +13,5 @@ GOLNextButton >> initialize [
 		label: 'Next >>';
 		addEventHandlerOn: BlMouseDownEvent
 			do: [ :evt | 
-			self halt.
-			
-			self fireEvent: GOLDoNextLifeEvent new 
-			]
+			self fireEvent: GOLDoNextLifeEvent new ]
 ]
