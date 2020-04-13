@@ -1,9 +1,8 @@
 Class {
 	#name : #GOLGameModel,
 	#superclass : #Object,
-	#traits : 'TBlEventTarget',
-	#classTraits : 'TBlEventTarget classTrait',
 	#instVars : [
+		'running',
 		'age',
 		'gridSize',
 		'statesHistory',
@@ -121,12 +120,13 @@ GOLGameModel >> initialize [
 	"Set te initial conditions of the model, excepts for the gridSize, 
 	 that hast to be set bup depending on the board size"
 
+	running := false.
 	age := 0.
 	currentState := GOLSparseMatrix new.
 	nextState := GOLSparseMatrix new.
 	statesHistory := OrderedCollection new.
 	deadNeighboarsBag := Bag new.
-	cellsToToggleSet := Set new.
+	cellsToToggleSet := Set new
 ]
 
 { #category : #testing }
@@ -143,6 +143,11 @@ GOLGameModel >> isHistoryEmpty [
 	statesHistory isEmpty
 ]
 
+{ #category : #accessing }
+GOLGameModel >> isRunning [
+^ running
+]
+
 { #category : #lifecycle }
 GOLGameModel >> lastLife [
 	self doLastLife.
@@ -152,8 +157,10 @@ GOLGameModel >> lastLife [
 { #category : #lifecycle }
 GOLGameModel >> nextLife [
 	| aliveNeighbors cellsToBeBorn |
+	self halt.
 	currentState content
 		do: [ :cellLocation | 
+			
 			aliveNeighbors := self getAliveNeighborsAt: cellLocation.
 			(aliveNeighbors size between: 2 and: 3)
 				ifTrue: [ nextState addAll: cellLocation ]
@@ -179,12 +186,21 @@ GOLGameModel >> nextState: anObject [
 
 { #category : #lifecycle }
 GOLGameModel >> onLastLife [
-	self fireEvent: GOLLastDoneLifeEvent new
 ]
 
 { #category : #lifecycle }
 GOLGameModel >> onNextLife [
-		self fireEvent: GOLNextDoneLifeEvent new
+
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> onStartLife [
+	
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> onStopLife [
+	
 ]
 
 { #category : #history }
@@ -216,6 +232,14 @@ GOLGameModel >> startLife [
 ]
 
 { #category : #accessing }
+GOLGameModel >> startRunning [
+	running := true.
+	[ running ]
+		whileTrue: [ [ 2 second wait.
+			'Next Life' logCr ] schedule ]
+]
+
+{ #category : #accessing }
 GOLGameModel >> statesHistory [
 	^ statesHistory
 ]
@@ -228,4 +252,9 @@ GOLGameModel >> statesHistory: anObject [
 { #category : #lifecycle }
 GOLGameModel >> stopLife [
 	
+]
+
+{ #category : #accessing }
+GOLGameModel >> stopRunning [
+	running := false
 ]

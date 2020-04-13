@@ -11,7 +11,5 @@ GOLNextButton >> initialize [
 	super initialize.
 	self
 		label: 'Next >>';
-		addEventHandlerOn: BlMouseDownEvent
-			do: [ :evt | 
-			self fireEvent: GOLDoNextLifeEvent new ]
+		addEventHandlerOn: BlMouseDownEvent do: [ :evt |  ]
 ]

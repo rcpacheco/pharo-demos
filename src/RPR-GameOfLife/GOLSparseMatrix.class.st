@@ -9,6 +9,12 @@ Class {
 	#category : #'RPR-GameOfLife-Model'
 }
 
+{ #category : #adding }
+GOLSparseMatrix >> addAll: aCollection [ 
+
+content addAll: aCollection 
+]
+
 { #category : #accessing }
 GOLSparseMatrix >> content [
 	^ content

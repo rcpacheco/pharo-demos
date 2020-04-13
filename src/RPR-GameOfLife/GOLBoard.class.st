@@ -27,14 +27,7 @@ GOLBoard class >> createWithSize: aPoint [
 		size: aPoint;
 		gameModel: aModel;
 		forceLayout;
-		addLinesAndCells;
-		addEventHandlerOn: GOLDoNextLifeEvent
-			do: [ :evt | 
-			evt target gameModel nextLife ];
-		addEventHandlerOn: GOLDoLastLifeEvent
-			do: [ :evt | evt target gameModel lastLife ];
-		addEventHandlerOn: GOLToogledCellEvent
-			do: [ :evt | evt target gameModel lastLife ] yourself
+		addLinesAndCells
 ]
 
 { #category : #'instace creation' }
@@ -42,7 +35,7 @@ GOLBoard class >> defaultBoard [
 	"Creates a board with the default dimensions"
 
 	<gtExample>
-	^ GOLBoard bigBoard
+	^ GOLBoard mediumBoard
 ]
 
 { #category : #'instace creation' }
@@ -108,12 +101,7 @@ GOLBoard >> getAllCells [
 GOLBoard >> initialize [
 	super initialize.
 	self
-		background: Color lightYellow;
-		addEventHandlerOn: GOLNextDoneLifeEvent
-			do: [ :evt | 
-			Transcript
-				show: 'Hola';
-				cr ]
+		background: Color lightYellow
 ]
 
 { #category : #'instance creation' }
@@ -159,4 +147,17 @@ GOLBoard >> newRowLineAt: r [
 { #category : #'instance creation' }
 GOLBoard >> newToogledCardEventListener [
 	^ GOLToogledCellEventListener new
+]
+
+{ #category : #draging }
+GOLBoard >> refreshAllCells [
+	self getAllCells do: [ :cell| self gameModel isAlliveCellAt: cell location ]
+]
+
+{ #category : #draging }
+GOLBoard >> toggleCellsIn: aCollection [
+		self getAllCells
+		do: [ :cell | 
+			(aCollection includes: cell location)
+				ifTrue: [ cell toggleState ] ]
 ]

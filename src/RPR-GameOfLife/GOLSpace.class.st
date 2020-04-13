@@ -18,8 +18,9 @@ GOLSpace >> initialize [
 
 	| headerElem boardElem |
 	super initialize.
-	headerElem := GOLHeader new.
+	
 	boardElem := GOLBoard defaultBoard.
+	headerElem := GOLHeader createWithModel: boardElem gameModel.
 	headerGap := headerElem defaultHeight.
 	self
 		extent: boardElem width @ (boardElem height + headerGap);

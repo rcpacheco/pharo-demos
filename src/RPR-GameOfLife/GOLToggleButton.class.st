@@ -17,9 +17,7 @@ GOLToggleButton >> initialize [
 		label: self stoppedLabel;
 		addEventHandlerOn: BlMouseDownEvent
 			do: [ :evt | 
-			self toggleGameStatus.
-			self fireEvent: GOLToogledCellEvent new.
-		]
+			self toggleGameStatus]
 ]
 
 { #category : #initialization }
