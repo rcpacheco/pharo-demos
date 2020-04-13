@@ -18,9 +18,8 @@ GOLToggleButton >> initialize [
 		addEventHandlerOn: BlMouseDownEvent
 			do: [ :evt | 
 			self toggleGameStatus.
-			Transcript
-				show: 'Toogle click';
-				cr ]
+			self fireEvent: GOLToogledCellEvent new.
+		]
 ]
 
 { #category : #initialization }

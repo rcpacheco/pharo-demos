@@ -13,8 +13,8 @@ GOLNextButton >> initialize [
 		label: 'Next >>';
 		addEventHandlerOn: BlMouseDownEvent
 			do: [ :evt | 
-			Transcript
-				show: 'Next click';
-				cr 
-				]
+			self halt.
+			
+			self fireEvent: GOLDoNextLifeEvent new 
+			]
 ]

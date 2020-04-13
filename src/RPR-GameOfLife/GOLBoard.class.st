@@ -19,14 +19,21 @@ GOLBoard class >> bigBoard [
 GOLBoard class >> createWithSize: aPoint [
 	"Creates a board with a specific size"
 
-| aModel |
-aModel := GOLGameModel new gridSize: aPoint; yourself.
+	| aModel |
+	aModel := GOLGameModel new
+		gridSize: aPoint;
+		yourself.
 	^ GOLBoard new
 		size: aPoint;
 		gameModel: aModel;
 		forceLayout;
 		addLinesAndCells;
-		yourself
+		addEventHandlerOn: GOLDoNextLifeEvent
+			do: [ :evt | self halt.evt target gameModel nextLife ];
+		addEventHandlerOn: GOLDoLastLifeEvent
+			do: [ :evt | evt target gameModel lastLife ];
+		addEventHandlerOn: GOLToogledCellEvent
+			do: [ :evt | evt target gameModel lastLife ] yourself
 ]
 
 { #category : #'instace creation' }
@@ -91,7 +98,7 @@ GOLBoard >> gameModel: anObject [
 	gameModel := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 GOLBoard >> getAllCells [
 ^ self children select: [ :ch | ch class = GOLCell]
 ]
@@ -100,7 +107,12 @@ GOLBoard >> getAllCells [
 GOLBoard >> initialize [
 	super initialize.
 	self
-		background: Color lightYellow
+		background: Color lightYellow;
+		addEventHandlerOn: GOLNextDoneLifeEvent
+			do: [ :evt | 
+			Transcript
+				show: 'Hola';
+				cr ]
 ]
 
 { #category : #'instance creation' }

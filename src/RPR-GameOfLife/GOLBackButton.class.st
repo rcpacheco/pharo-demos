@@ -12,8 +12,5 @@ GOLBackButton >> initialize [
 	self
 		label: '<< Back';
 		addEventHandlerOn: BlMouseDownEvent
-			do: [ :evt | 
-			Transcript
-				show: 'Back click';
-				cr ]
+			do: [ :evt | self fireEvent: GOLDoLastLifeEvent new ]
 ]

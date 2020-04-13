@@ -1,6 +1,8 @@
 Class {
 	#name : #GOLGameModel,
 	#superclass : #Object,
+	#traits : 'TBlEventTarget',
+	#classTraits : 'TBlEventTarget classTrait',
 	#instVars : [
 		'age',
 		'gridSize',
@@ -119,12 +121,12 @@ GOLGameModel >> initialize [
 	"Set te initial conditions of the model, excepts for the gridSize, 
 	 that hast to be set bup depending on the board size"
 
-	 age := 0.
-	 currentState := GOLSparseMatrix new.
-	 nextState := GOLSparseMatrix new.
-	 statesHistory := OrderedCollection new.
-	 deadNeighboarsBag := Bag new.
-	 cellsToToggleSet := Set new
+	age := 0.
+	currentState := GOLSparseMatrix new.
+	nextState := GOLSparseMatrix new.
+	statesHistory := OrderedCollection new.
+	deadNeighboarsBag := Bag new.
+	cellsToToggleSet := Set new.
 ]
 
 { #category : #testing }
@@ -177,12 +179,12 @@ GOLGameModel >> nextState: anObject [
 
 { #category : #lifecycle }
 GOLGameModel >> onLastLife [
-	
+	self fireEvent: GOLLastDoneLifeEvent new
 ]
 
 { #category : #lifecycle }
 GOLGameModel >> onNextLife [
-	
+		self fireEvent: GOLNextDoneLifeEvent new
 ]
 
 { #category : #history }
@@ -209,6 +211,10 @@ GOLGameModel >> setCellStateAt: aPoint value: aValue [
 	currentState setCellStateAt: aPoint value: aValue
 ]
 
+{ #category : #lifecycle }
+GOLGameModel >> startLife [
+]
+
 { #category : #accessing }
 GOLGameModel >> statesHistory [
 	^ statesHistory
@@ -217,4 +223,9 @@ GOLGameModel >> statesHistory [
 { #category : #accessing }
 GOLGameModel >> statesHistory: anObject [
 	statesHistory := anObject
+]
+
+{ #category : #lifecycle }
+GOLGameModel >> stopLife [
+	
 ]
