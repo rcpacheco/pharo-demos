@@ -18,9 +18,16 @@ GOLSpace >> initialize [
 
 	| headerElem boardElem |
 	super initialize.
-	
 	boardElem := GOLBoard defaultBoard.
 	headerElem := GOLHeader createWithModel: boardElem gameModel.
+	boardElem gameModel announcer
+		when: GOLNextLifeAnnouncement
+		send: #onNextLife
+		to: headerElem.
+	boardElem gameModel announcer
+		when: GOLLastLifeAnnouncement
+		send: #onLastLife
+		to: headerElem.
 	headerGap := headerElem defaultHeight.
 	self
 		extent: boardElem width @ (boardElem height + headerGap);

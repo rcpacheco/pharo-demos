@@ -2,7 +2,9 @@ Class {
 	#name : #GOLHeader,
 	#superclass : #BrHorizontalPane,
 	#instVars : [
-		'gameModel'
+		'gameModel',
+		'ageLabel',
+		'age'
 	],
 	#category : #'RPR-GameOfLife-Elements'
 }
@@ -16,14 +18,28 @@ GOLHeader class >> createWithModel: aModel [
 
 { #category : #initialization }
 GOLHeader >> addElements [
+	ageLabel := GOLLabel text: age.
 	self
 		addChildren:
 			{(GOLLabel text: 'Age:').
-			(GOLLabel text: 0).
-			GOLBackButton new addEventHandler: (self newLastEventListener gameModel: gameModel).
-			GOLToggleButton new.
-			GOLNextButton new addEventHandler: (self newNextEventListener gameModel: gameModel).
+			ageLabel.
+			(GOLBackButton new
+				addEventHandler: (self newLastEventListener gameModel: gameModel)).
+			(GOLToggleButton new
+			addEventHandler: (self newToggleRunEventListener gameModel: gameModel)).
+			(GOLNextButton new
+				addEventHandler: (self newNextEventListener gameModel: gameModel)).
 			GOLLabel new}
+]
+
+{ #category : #accessing }
+GOLHeader >> ageLabel [
+	^ ageLabel
+]
+
+{ #category : #accessing }
+GOLHeader >> ageLabel: anObject [
+	ageLabel := anObject
 ]
 
 { #category : #accessing }
@@ -47,11 +63,15 @@ GOLHeader >> initialize [
 	"Creates a new instance and define its positioning, background and spacing attributes"
 
 	super initialize.
-	self 		relocate: 0 @ 0;
+	age := 0.
+	self
+		
+		relocate: 0 @ 0;
 		hMatchParent;
 		height: self defaultHeight;
 		alignCenter;
-		cellSpacing: 20;background: Color orange
+		cellSpacing: 20;
+		background: Color orange
 ]
 
 { #category : #'instance creation' }
@@ -62,4 +82,21 @@ GOLHeader >> newLastEventListener [
 { #category : #'instance creation' }
 GOLHeader >> newNextEventListener [
 	^ GOLNextEventListener new
+]
+
+{ #category : #'instance creation' }
+GOLHeader >> newToggleRunEventListener [
+	^ GOLToogleRunEventListener new
+]
+
+{ #category : #lifecycle }
+GOLHeader >> onLastLife [
+	age := age - 1.
+	ageLabel text: age
+]
+
+{ #category : #lifecycle }
+GOLHeader >> onNextLife [
+	age := age + 1.
+	ageLabel text: age
 ]

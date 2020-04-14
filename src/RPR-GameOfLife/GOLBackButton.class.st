@@ -9,6 +9,6 @@ GOLBackButton >> initialize [
 	"Set the initial state of the button"
 
 	super initialize.
-	self label: '<< Back';
-		addEventHandlerOn: BlMouseDownEvent do: [ :evt |  ]
+	self
+		label: '<< Back'
 ]
