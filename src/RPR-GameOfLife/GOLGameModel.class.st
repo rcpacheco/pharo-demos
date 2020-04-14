@@ -21,11 +21,6 @@ GOLGameModel >> age [
 ]
 
 { #category : #accessing }
-GOLGameModel >> age: anObject [
-	age := anObject
-]
-
-{ #category : #accessing }
 GOLGameModel >> announcer [
 		^ announcer ifNil: [ announcer := Announcer new ]
 ]
@@ -45,11 +40,6 @@ GOLGameModel >> currentState: anObject [
 { #category : #accessing }
 GOLGameModel >> deadNeighboars [
 	^ deadNeighboars
-]
-
-{ #category : #accessing }
-GOLGameModel >> deadNeighboars: anObject [
-	deadNeighboars := anObject
 ]
 
 { #category : #lifecycle }
@@ -135,6 +125,13 @@ GOLGameModel >> isHistoryEmpty [
 	^statesHistory isEmpty
 ]
 
+{ #category : #history }
+GOLGameModel >> isNotEmptyCurrentState [
+	"SChecks if the states history is empty."
+
+	^ currentState content isNotEmpty
+]
+
 { #category : #accessing }
 GOLGameModel >> isRunning [
 ^ running
@@ -154,17 +151,21 @@ GOLGameModel >> lastLife [
 { #category : #lifecycle }
 GOLGameModel >> nextLife [
 	| cellsToKeepAlive aliveNeighbors cellsToBeBorn |
-	cellsToKeepAlive := currentState content
-		select: [ :cellLocation | 
-			aliveNeighbors := self getAliveNeighborsAt: cellLocation.
-			deadNeighboars addAll: (self getDeadNeighborsAt: cellLocation).
-			aliveNeighbors size between: 2 and: 3 ].
-	cellsToBeBorn := (deadNeighboars valuesAndCounts
-		associationsSelect: [ :assoc | assoc value = 3 ]) keys.
-	nextState addAll: cellsToKeepAlive.
-	nextState addAll: cellsToBeBorn.
-	self doNextLife;
-	onNextLife
+
+		cellsToKeepAlive := currentState content
+				select: [ :cellLocation | 
+					aliveNeighbors := self getAliveNeighborsAt: cellLocation.
+					deadNeighboars addAll: (self getDeadNeighborsAt: cellLocation).
+					aliveNeighbors size between: 2 and: 3 ].
+			cellsToBeBorn := (deadNeighboars valuesAndCounts
+				associationsSelect: [ :assoc | assoc value = 3 ]) keys.
+			nextState addAll: cellsToKeepAlive.
+			nextState addAll: cellsToBeBorn.
+				self isNotEmptyCurrentState
+				ifTrue: [ 
+			self
+				doNextLife;
+				onNextLife ]
 ]
 
 { #category : #accessing }
@@ -182,14 +183,26 @@ GOLGameModel >> notifyEvolved [
 		self announcer announce: GOLCellsEvolvedAnnouncement new
 ]
 
+{ #category : #notification }
+GOLGameModel >> notifyLastLife [
+	self announcer announce: GOLLastLifeAnnouncement new
+]
+
+{ #category : #notification }
+GOLGameModel >> notifyNextLife [
+	self announcer announce: GOLNextLifeAnnouncement new
+]
+
 { #category : #lifecycle }
 GOLGameModel >> onLastLife [
-	self notifyEvolved 
+	self notifyEvolved;
+	notifyLastLife 
 ]
 
 { #category : #lifecycle }
 GOLGameModel >> onNextLife [
-	self notifyEvolved 
+	self notifyEvolved;
+	notifyNextLife 
 ]
 
 { #category : #lifecycle }

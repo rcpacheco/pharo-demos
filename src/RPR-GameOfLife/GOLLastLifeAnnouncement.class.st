@@ -1,5 +1,5 @@
 Class {
-	#name : #GOLCellsEvolvedAnnouncement,
+	#name : #GOLLastLifeAnnouncement,
 	#superclass : #Announcement,
 	#category : #'RPR-GameOfLife-Events'
 }
