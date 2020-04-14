@@ -2,7 +2,6 @@ Class {
 	#name : #GOLGameModel,
 	#superclass : #Object,
 	#instVars : [
-		'running',
 		'age',
 		'gridSize',
 		'statesHistory',
@@ -102,7 +101,6 @@ GOLGameModel >> initialize [
 	"Set te initial conditions of the model, excepts for the gridSize, 
 	 that hast to be set bup depending on the board size"
 
-	running := false.
 	age := 0.
 	currentState := GOLSparseMatrix new.
 	nextState := GOLSparseMatrix new.
@@ -130,11 +128,6 @@ GOLGameModel >> isNotEmptyCurrentState [
 
 	^ currentState content isNotEmpty
 
-]
-
-{ #category : #accessing }
-GOLGameModel >> isRunning [
-^ running
 ]
 
 { #category : #lifecycle }
