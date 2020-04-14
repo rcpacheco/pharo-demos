@@ -42,7 +42,7 @@ GOLBoard class >> defaultBoard [
 	"Creates a board with the default dimensions"
 
 	<gtExample>
-	^ GOLBoard mediumBoard
+	^ GOLBoard bigBoard
 ]
 
 { #category : #'instace creation' }
@@ -59,14 +59,6 @@ GOLBoard class >> smallBoard [
 
 	<gtExample>
 	^ GOLBoard createWithSize: 400 @ 320
-]
-
-{ #category : #'instace creation' }
-GOLBoard class >> tinyBoard [
-	"Creates a board with a specific size"
-
-	<gtExample>
-	^ GOLBoard createWithSize: 300 @ 160
 ]
 
 { #category : #adding }

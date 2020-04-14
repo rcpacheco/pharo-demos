@@ -9,9 +9,7 @@ Class {
 		'currentState',
 		'nextState',
 		'deadNeighboars',
-		'cellsToToggleSet',
-		'announcer',
-		'ticSize'
+		'announcer'
 	],
 	#category : #'RPR-GameOfLife-Model'
 }
@@ -106,7 +104,6 @@ GOLGameModel >> initialize [
 
 	running := false.
 	age := 0.
-	ticSize := 5.
 	currentState := GOLSparseMatrix new.
 	nextState := GOLSparseMatrix new.
 	statesHistory := OrderedCollection new.
@@ -125,6 +122,14 @@ GOLGameModel >> isHistoryEmpty [
 	"SChecks if the states history is empty."
 
 	^statesHistory isEmpty
+]
+
+{ #category : #accessing }
+GOLGameModel >> isNotEmptyCurrentState [ 
+	"SChecks if the states history is empty."
+
+	^ currentState content isNotEmpty
+
 ]
 
 { #category : #accessing }
@@ -155,9 +160,12 @@ GOLGameModel >> nextLife [
 		associationsSelect: [ :assoc | assoc value = 3 ]) keys.
 	nextState addAll: cellsToKeepAlive.
 	nextState addAll: cellsToBeBorn.
+	self isNotEmptyCurrentState
+				ifTrue: [
 	self
 		doNextLife;
-		onNextLife 
+		onNextLife
+		]
 ]
 
 { #category : #accessing }
@@ -183,16 +191,6 @@ GOLGameModel >> notifyLastLife [
 { #category : #notification }
 GOLGameModel >> notifyNextLife [
 	self announcer announce: GOLNextLifeAnnouncement new
-]
-
-{ #category : #notification }
-GOLGameModel >> notifyStart [
-	self announcer announce: GOLStartAnnouncement new
-]
-
-{ #category : #notification }
-GOLGameModel >> notifyStop [
-	self announcer announce: GOLStopAnnouncement new
 ]
 
 { #category : #lifecycle }
@@ -235,15 +233,6 @@ GOLGameModel >> setCellStateAt: aPoint value: aValue [
 	currentState setCellStateAt: aPoint value: aValue
 ]
 
-{ #category : #lifecycle }
-GOLGameModel >> startLife [
-	running := true.
-	[ self isRunning | (age = 50) ]
-		whileTrue: [ [ ticSize milliSeconds wait.
-			self nextLife ] schedule ].
-	self notifyStart
-]
-
 { #category : #accessing }
 GOLGameModel >> statesHistory [
 	^ statesHistory
@@ -252,12 +241,4 @@ GOLGameModel >> statesHistory [
 { #category : #accessing }
 GOLGameModel >> statesHistory: anObject [
 	statesHistory := anObject
-]
-
-{ #category : #lifecycle }
-GOLGameModel >> stopLife [
-	running := false.
-	
-	self
-		notifyStop 
 ]
