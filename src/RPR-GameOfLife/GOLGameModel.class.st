@@ -31,16 +31,6 @@ GOLGameModel >> announcer [
 ]
 
 { #category : #accessing }
-GOLGameModel >> cellsToToggleSet [
-	^ cellsToToggleSet
-]
-
-{ #category : #accessing }
-GOLGameModel >> cellsToToggleSet: anObject [
-	cellsToToggleSet := anObject
-]
-
-{ #category : #accessing }
 GOLGameModel >> currentState [
 	"Gives access to the current state of the model"
 
@@ -64,12 +54,10 @@ GOLGameModel >> deadNeighboars: anObject [
 
 { #category : #lifecycle }
 GOLGameModel >> doLastLife [
-	self pushCurrentStateToHistory.
-	age := age + 1.
-	currentState := nextState.
-	nextState := GOLSparseMatrix new.
-	deadNeighboars removeAll.
-	cellsToToggleSet removeAll
+	self popLastStateFromHistory.
+	age := age - 1.
+	nextState reset.
+	deadNeighboars removeAll
 ]
 
 { #category : #lifecycle }
@@ -144,7 +132,7 @@ GOLGameModel >> isAlliveCellAt: aPoint [
 GOLGameModel >> isHistoryEmpty [
 	"SChecks if the states history is empty."
 
-	statesHistory isEmpty
+	^statesHistory isEmpty
 ]
 
 { #category : #accessing }
@@ -154,8 +142,13 @@ GOLGameModel >> isRunning [
 
 { #category : #lifecycle }
 GOLGameModel >> lastLife [
-	self doLastLife.
-	self onLastLife
+	self isHistoryEmpty 
+	ifFalse: [ 
+		self 
+			doLastLife;
+			onLastLife
+	]
+		
 ]
 
 { #category : #lifecycle }
@@ -170,8 +163,8 @@ GOLGameModel >> nextLife [
 		associationsSelect: [ :assoc | assoc value = 3 ]) keys.
 	nextState addAll: cellsToKeepAlive.
 	nextState addAll: cellsToBeBorn.
-	self doNextLife.
-	self onNextLife
+	self doNextLife;
+	onNextLife
 ]
 
 { #category : #accessing }
@@ -213,17 +206,21 @@ GOLGameModel >> onStopLife [
 GOLGameModel >> popLastStateFromHistory [
 	"Recovers the last state stored in history if there is one, otherwise trows an error."
 
-	self
-		assert: self isHistoryEmpty not
-		description: [ 'History is empty' ].
-	^ statesHistory removeLast
+	| sapo |
+	sapo := currentState content.
+ currentState content: statesHistory removeLast.
+	^ currentState
 ]
 
 { #category : #history }
 GOLGameModel >> pushCurrentStateToHistory [
 	"Stores the current state as the last element in the states history."
 
-	self statesHistory addLast: self currentState
+	| points |
+	points := Set new.
+	points addAll: self currentState content.
+	self statesHistory add: points.
+	^ self statesHistory
 ]
 
 { #category : #initialization }
