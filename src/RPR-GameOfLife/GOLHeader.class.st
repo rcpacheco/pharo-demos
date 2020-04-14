@@ -25,7 +25,8 @@ GOLHeader >> addElements [
 			ageLabel.
 			(GOLBackButton new
 				addEventHandler: (self newLastEventListener gameModel: gameModel)).
-			GOLToggleButton new.
+			(GOLToggleButton new
+			addEventHandler: (self newToggleRunEventListener gameModel: gameModel)).
 			(GOLNextButton new
 				addEventHandler: (self newNextEventListener gameModel: gameModel)).
 			GOLLabel new}
@@ -81,6 +82,11 @@ GOLHeader >> newLastEventListener [
 { #category : #'instance creation' }
 GOLHeader >> newNextEventListener [
 	^ GOLNextEventListener new
+]
+
+{ #category : #'instance creation' }
+GOLHeader >> newToggleRunEventListener [
+	^ GOLToogleRunEventListener new
 ]
 
 { #category : #lifecycle }

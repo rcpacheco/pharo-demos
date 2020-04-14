@@ -10,7 +10,8 @@ Class {
 		'nextState',
 		'deadNeighboars',
 		'cellsToToggleSet',
-		'announcer'
+		'announcer',
+		'ticSize'
 	],
 	#category : #'RPR-GameOfLife-Model'
 }
@@ -105,6 +106,7 @@ GOLGameModel >> initialize [
 
 	running := false.
 	age := 0.
+	ticSize := 5.
 	currentState := GOLSparseMatrix new.
 	nextState := GOLSparseMatrix new.
 	statesHistory := OrderedCollection new.
@@ -123,13 +125,6 @@ GOLGameModel >> isHistoryEmpty [
 	"SChecks if the states history is empty."
 
 	^statesHistory isEmpty
-]
-
-{ #category : #history }
-GOLGameModel >> isNotEmptyCurrentState [
-	"SChecks if the states history is empty."
-
-	^ currentState content isNotEmpty
 ]
 
 { #category : #accessing }
@@ -151,21 +146,18 @@ GOLGameModel >> lastLife [
 { #category : #lifecycle }
 GOLGameModel >> nextLife [
 	| cellsToKeepAlive aliveNeighbors cellsToBeBorn |
-
-		cellsToKeepAlive := currentState content
-				select: [ :cellLocation | 
-					aliveNeighbors := self getAliveNeighborsAt: cellLocation.
-					deadNeighboars addAll: (self getDeadNeighborsAt: cellLocation).
-					aliveNeighbors size between: 2 and: 3 ].
-			cellsToBeBorn := (deadNeighboars valuesAndCounts
-				associationsSelect: [ :assoc | assoc value = 3 ]) keys.
-			nextState addAll: cellsToKeepAlive.
-			nextState addAll: cellsToBeBorn.
-				self isNotEmptyCurrentState
-				ifTrue: [ 
-			self
-				doNextLife;
-				onNextLife ]
+	cellsToKeepAlive := currentState content
+		select: [ :cellLocation | 
+			aliveNeighbors := self getAliveNeighborsAt: cellLocation.
+			deadNeighboars addAll: (self getDeadNeighborsAt: cellLocation).
+			aliveNeighbors size between: 2 and: 3 ].
+	cellsToBeBorn := (deadNeighboars valuesAndCounts
+		associationsSelect: [ :assoc | assoc value = 3 ]) keys.
+	nextState addAll: cellsToKeepAlive.
+	nextState addAll: cellsToBeBorn.
+	self
+		doNextLife;
+		onNextLife 
 ]
 
 { #category : #accessing }
@@ -193,6 +185,16 @@ GOLGameModel >> notifyNextLife [
 	self announcer announce: GOLNextLifeAnnouncement new
 ]
 
+{ #category : #notification }
+GOLGameModel >> notifyStart [
+	self announcer announce: GOLStartAnnouncement new
+]
+
+{ #category : #notification }
+GOLGameModel >> notifyStop [
+	self announcer announce: GOLStopAnnouncement new
+]
+
 { #category : #lifecycle }
 GOLGameModel >> onLastLife [
 	self notifyEvolved;
@@ -203,16 +205,6 @@ GOLGameModel >> onLastLife [
 GOLGameModel >> onNextLife [
 	self notifyEvolved;
 	notifyNextLife 
-]
-
-{ #category : #lifecycle }
-GOLGameModel >> onStartLife [
-	
-]
-
-{ #category : #lifecycle }
-GOLGameModel >> onStopLife [
-	
 ]
 
 { #category : #history }
@@ -245,14 +237,11 @@ GOLGameModel >> setCellStateAt: aPoint value: aValue [
 
 { #category : #lifecycle }
 GOLGameModel >> startLife [
-]
-
-{ #category : #accessing }
-GOLGameModel >> startRunning [
 	running := true.
-	[ running ]
-		whileTrue: [ [ 2 second wait.
-			'Next Life' logCr ] schedule ]
+	[ self isRunning | (age = 50) ]
+		whileTrue: [ [ ticSize milliSeconds wait.
+			self nextLife ] schedule ].
+	self notifyStart
 ]
 
 { #category : #accessing }
@@ -267,10 +256,8 @@ GOLGameModel >> statesHistory: anObject [
 
 { #category : #lifecycle }
 GOLGameModel >> stopLife [
+	running := false.
 	
-]
-
-{ #category : #accessing }
-GOLGameModel >> stopRunning [
-	running := false
+	self
+		notifyStop 
 ]

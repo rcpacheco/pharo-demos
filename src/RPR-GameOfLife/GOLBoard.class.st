@@ -127,7 +127,7 @@ GOLBoard >> newCellAt: c at: r model: aGameModel [
 	| cell |
 	cell := GOLCell new
 		location: c @ r;
-		addEventHandler: (self newToogledCardEventListener gameModel: aGameModel);
+		addEventHandler: (self newToogledCellEventListener gameModel: aGameModel);
 		relocate: ((c - 1) * self cellsGap + 1) @ ((r - 1) * self cellsGap + 1).
 	self addChild: cell.
 	^ cell
@@ -160,7 +160,7 @@ GOLBoard >> newRowLineAt: r [
 ]
 
 { #category : #'instance creation' }
-GOLBoard >> newToogledCardEventListener [
+GOLBoard >> newToogledCellEventListener [
 	^ GOLToogledCellEventListener new
 ]
 
