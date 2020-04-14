@@ -8,8 +8,9 @@ Class {
 		'statesHistory',
 		'currentState',
 		'nextState',
-		'deadNeighboarsBag',
-		'cellsToToggleSet'
+		'deadNeighboars',
+		'cellsToToggleSet',
+		'announcer'
 	],
 	#category : #'RPR-GameOfLife-Model'
 }
@@ -22,6 +23,11 @@ GOLGameModel >> age [
 { #category : #accessing }
 GOLGameModel >> age: anObject [
 	age := anObject
+]
+
+{ #category : #accessing }
+GOLGameModel >> announcer [
+		^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
 { #category : #accessing }
@@ -47,13 +53,13 @@ GOLGameModel >> currentState: anObject [
 ]
 
 { #category : #accessing }
-GOLGameModel >> deadNeighboarsBag [
-	^ deadNeighboarsBag
+GOLGameModel >> deadNeighboars [
+	^ deadNeighboars
 ]
 
 { #category : #accessing }
-GOLGameModel >> deadNeighboarsBag: anObject [
-	deadNeighboarsBag := anObject
+GOLGameModel >> deadNeighboars: anObject [
+	deadNeighboars := anObject
 ]
 
 { #category : #lifecycle }
@@ -62,7 +68,7 @@ GOLGameModel >> doLastLife [
 	age := age + 1.
 	currentState := nextState.
 	nextState := GOLSparseMatrix new.
-	deadNeighboarsBag removeAll.
+	deadNeighboars removeAll.
 	cellsToToggleSet removeAll
 ]
 
@@ -70,10 +76,9 @@ GOLGameModel >> doLastLife [
 GOLGameModel >> doNextLife [
 	self pushCurrentStateToHistory.
 	age := age + 1.
-	currentState := nextState.
-	nextState := GOLSparseMatrix new.
-	deadNeighboarsBag removeAll.
-	cellsToToggleSet removeAll
+	currentState resetAndAddAll: nextState content.
+	nextState reset.
+	deadNeighboars removeAll
 ]
 
 { #category : #location }
@@ -125,8 +130,7 @@ GOLGameModel >> initialize [
 	currentState := GOLSparseMatrix new.
 	nextState := GOLSparseMatrix new.
 	statesHistory := OrderedCollection new.
-	deadNeighboarsBag := Bag new.
-	cellsToToggleSet := Set new
+	deadNeighboars := Bag new
 ]
 
 { #category : #testing }
@@ -156,20 +160,16 @@ GOLGameModel >> lastLife [
 
 { #category : #lifecycle }
 GOLGameModel >> nextLife [
-	| aliveNeighbors cellsToBeBorn |
-	self halt.
-	currentState content
-		do: [ :cellLocation | 
-			
+	| cellsToKeepAlive aliveNeighbors cellsToBeBorn |
+	cellsToKeepAlive := currentState content
+		select: [ :cellLocation | 
 			aliveNeighbors := self getAliveNeighborsAt: cellLocation.
-			(aliveNeighbors size between: 2 and: 3)
-				ifTrue: [ nextState addAll: cellLocation ]
-				ifFalse: [ cellsToToggleSet addAll: cellLocation ].
-			deadNeighboarsBag addAll: (self getDeadNeighborsAt: cellLocation) ].
-	cellsToBeBorn := (deadNeighboarsBag valuesAndCounts
+			deadNeighboars addAll: (self getDeadNeighborsAt: cellLocation).
+			aliveNeighbors size between: 2 and: 3 ].
+	cellsToBeBorn := (deadNeighboars valuesAndCounts
 		associationsSelect: [ :assoc | assoc value = 3 ]) keys.
+	nextState addAll: cellsToKeepAlive.
 	nextState addAll: cellsToBeBorn.
-	cellsToToggleSet addAll: cellsToBeBorn.
 	self doNextLife.
 	self onNextLife
 ]
@@ -184,13 +184,19 @@ GOLGameModel >> nextState: anObject [
 	nextState := anObject
 ]
 
+{ #category : #notification }
+GOLGameModel >> notifyEvolved [
+		self announcer announce: GOLCellsEvolvedAnnouncement new
+]
+
 { #category : #lifecycle }
 GOLGameModel >> onLastLife [
+	self notifyEvolved 
 ]
 
 { #category : #lifecycle }
 GOLGameModel >> onNextLife [
-
+	self notifyEvolved 
 ]
 
 { #category : #lifecycle }

@@ -10,9 +10,16 @@ Class {
 }
 
 { #category : #adding }
+GOLSparseMatrix >> add: aPoint [ 
+
+content add: aPoint 
+]
+
+{ #category : #adding }
 GOLSparseMatrix >> addAll: aCollection [ 
 
-content addAll: aCollection 
+	aCollection do: [:each | self add: each].
+	^ aCollection
 ]
 
 { #category : #accessing }
@@ -54,6 +61,19 @@ GOLSparseMatrix >> isDeadCellAt: aPoint [
 	"Returns true if a dead cell exist at the location aPoint."
 
 	^ (self isAlliveCellAt: aPoint) not
+]
+
+{ #category : #adding }
+GOLSparseMatrix >> reset [
+	content removeAll.
+
+]
+
+{ #category : #adding }
+GOLSparseMatrix >> resetAndAddAll: aCollection [
+	self reset.
+	aCollection do: [ :each | self add: each ].
+	^ aCollection
 ]
 
 { #category : #initialization }

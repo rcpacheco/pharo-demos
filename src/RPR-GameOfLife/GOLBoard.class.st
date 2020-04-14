@@ -19,15 +19,22 @@ GOLBoard class >> bigBoard [
 GOLBoard class >> createWithSize: aPoint [
 	"Creates a board with a specific size"
 
-	| aModel |
+	| aModel board |
 	aModel := GOLGameModel new
 		gridSize: aPoint;
 		yourself.
-	^ GOLBoard new
+
+	board :=  GOLBoard new
 		size: aPoint;
 		gameModel: aModel;
 		forceLayout;
-		addLinesAndCells
+		addLinesAndCells;
+		yourself.
+	aModel announcer
+		when: GOLCellsEvolvedAnnouncement
+		send: #onEvolved
+		to: board.	
+			^board	
 ]
 
 { #category : #'instace creation' }
@@ -52,6 +59,14 @@ GOLBoard class >> smallBoard [
 
 	<gtExample>
 	^ GOLBoard createWithSize: 400 @ 320
+]
+
+{ #category : #'instace creation' }
+GOLBoard class >> tinyBoard [
+	"Creates a board with a specific size"
+
+	<gtExample>
+	^ GOLBoard createWithSize: 300 @ 160
 ]
 
 { #category : #adding }
@@ -149,15 +164,16 @@ GOLBoard >> newToogledCardEventListener [
 	^ GOLToogledCellEventListener new
 ]
 
-{ #category : #draging }
-GOLBoard >> refreshAllCells [
-	self getAllCells do: [ :cell| self gameModel isAlliveCellAt: cell location ]
+{ #category : #'announcement - handling' }
+GOLBoard >> onEvolved [
+		self  refreshAllCells 
 ]
 
-{ #category : #draging }
-GOLBoard >> toggleCellsIn: aCollection [
-		self getAllCells
+{ #category : #drawing }
+GOLBoard >> refreshAllCells [
+	self getAllCells
 		do: [ :cell | 
-			(aCollection includes: cell location)
-				ifTrue: [ cell toggleState ] ]
+			(self gameModel isAlliveCellAt: cell location)
+				ifTrue: [ cell setAlive ]
+				ifFalse: [ cell setDead ] ]
 ]
