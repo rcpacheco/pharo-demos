@@ -20,9 +20,7 @@ GOLBoard class >> createWithSize: aPoint [
 	"Creates a board with a specific size"
 
 	| aModel board |
-	aModel := GOLGameModel new
-		gridSize: aPoint;
-		yourself.
+	aModel := GOLGameModel new.
 
 	board :=  GOLBoard new
 		size: aPoint;
@@ -30,6 +28,9 @@ GOLBoard class >> createWithSize: aPoint [
 		forceLayout;
 		addLinesAndCells;
 		yourself.
+		
+	aModel gridSize: board sizeInCellsAndRows.
+	
 	aModel announcer
 		when: GOLCellsEvolvedAnnouncement
 		send: #onEvolved
@@ -168,4 +169,10 @@ GOLBoard >> refreshAllCells [
 			(self gameModel isAlliveCellAt: cell location)
 				ifTrue: [ cell setAlive ]
 				ifFalse: [ cell setDead ] ]
+]
+
+{ #category : #accessing }
+GOLBoard >> sizeInCellsAndRows [
+
+^ (self width/ self cellsGap) @ (self height / self cellsGap)
 ]

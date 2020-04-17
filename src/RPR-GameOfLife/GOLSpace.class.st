@@ -4,7 +4,7 @@ I represent the Bloc space where the Game of Life is running
 "
 Class {
 	#name : #GOLSpace,
-	#superclass : #BlSpace,
+	#superclass : #BlElement,
 	#instVars : [
 		'headerGap'
 	],
@@ -30,9 +30,8 @@ GOLSpace >> initialize [
 		to: headerElem.
 	headerGap := headerElem defaultHeight.
 	self
-		extent: boardElem width @ (boardElem height + headerGap);
-		title: 'Conway''s Game of Life'.
-	self root
+		size: boardElem width @ (boardElem height + headerGap).
+	self 
 		layout:
 			(BlGridLayout new
 				columnCount: 1;

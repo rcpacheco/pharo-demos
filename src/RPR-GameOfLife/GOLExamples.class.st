@@ -8,6 +8,6 @@ Class {
 GOLExamples class >> open [
 	"I create and start a game"
 
-	<script: 'self open'>
-	GOLSpace new show
+	<gtExample>
+	^ GOLSpace new 
 ]
