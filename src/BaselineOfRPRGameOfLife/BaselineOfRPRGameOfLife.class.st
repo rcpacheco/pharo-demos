@@ -9,19 +9,18 @@ BaselineOfRPRGameOfLife >> baseline: spec [
 	<baseline>
 	spec
 		for: #common
-		do: [
-			"Dependencies"
+		do: [ "Dependencies"
 			self brick: spec.
 
 			"Packages"
-			spec package: 'RPR-GameOfLife' with: [ spec requires: #('Brick') ] ]
+			spec package: 'RPR-GameOfLife' ]
 ]
 
 { #category : #accessing }
 BaselineOfRPRGameOfLife >> brick: spec [
-spec
-project: 'Brick'
-with: [ spec repository: 'github://feenkcom/Brick/src' ]
+	spec
+		baseline: 'Brick'
+		with: [ spec repository: 'github://feenkcom/Brick/src' ]
 ]
 
 { #category : #accessing }
