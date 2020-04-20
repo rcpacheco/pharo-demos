@@ -11,10 +11,6 @@ BaselineOfRPRGameOfLife >> baseline: spec [
 		for: #common
 		do: [ 
 			"Packages"
-			spec package: 'RPR-GameOfLife' with: [ spec requires: #('Brick') ] ]
+			spec package: 'RPR-GameOfLife' ]
 ]
 
-{ #category : #accessing }
-BaselineOfRPRGameOfLife >> projectClass [
-	^ MetacelloCypressBaselineProject
-]
